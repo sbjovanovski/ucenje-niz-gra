@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {cards} from "../../constants";
 import {useState} from "react";
 import {Card} from "../../typings/types";
+import InputCharacters from "../InputCharacters";
 
 const MainWrapper = styled.div`
   margin: 2rem;
@@ -58,6 +59,7 @@ const App = () => {
             front={<CardImage src={card.frontImage} alt={card.correctAnswer}/>}
             back={<CardImage src={card.backImage} alt={card.correctAnswer}/>}
             flipped={card.flipped}
+            correctAnswer={card.correctAnswer}
           />
         ))}
       </AppContent>

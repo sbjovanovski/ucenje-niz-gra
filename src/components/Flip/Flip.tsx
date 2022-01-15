@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import {ReactNode} from "react";
+import InputCharacters from "../InputCharacters";
 
 const FlipBox = styled.div`
   background-color: transparent;
@@ -36,17 +37,33 @@ const FlipBoxContent = styled.div`
   `}
 `
 
+const InputWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 1.5rem;
+  width: 100%;
+`
+
 interface FlipProps {
   front: ReactNode | string
   back: ReactNode | string
   flipped: boolean
+  correctAnswer: string
 }
 
-const Flip = ({front, back, flipped}: FlipProps) => (
+const Flip = ({front, back, flipped, correctAnswer}: FlipProps) => (
   <FlipBox data-testid='Flip-test-id'>
     <FlipBoxInner isFlipped={flipped}>
       <FlipBoxContent>
         {front}
+        <InputWrapper>
+          <InputCharacters
+            numberOfCharacters={correctAnswer.length}
+            onDone={(word) => alert(word)}
+          />
+        </InputWrapper>
       </FlipBoxContent>
       <FlipBoxContent flippedContent>
         {back}

@@ -1,0 +1,7 @@
+{
+  "name": "InputCharacters",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./InputCharacters.tsx",
+  "types": "./InputCharacters.tsx"
+}
