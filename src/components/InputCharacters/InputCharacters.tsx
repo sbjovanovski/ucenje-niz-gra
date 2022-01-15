@@ -16,6 +16,7 @@ const InputCharacter = styled.input`
   border: none;
   border-bottom: 3px solid #4a4a4a;
   text-align: center;
+  font-size: 1rem;
 `
 const generateUUID = () => {
   let d = Date.now();
