@@ -1,0 +1,9 @@
+import * as React from 'react'
+
+const {name} = () => (
+  <div data-testid='{name}-test-id'>
+    {name}
+  </div>
+)
+
+export default {name}

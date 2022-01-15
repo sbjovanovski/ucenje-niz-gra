@@ -1,0 +1,8 @@
+import * as React from 'react'
+import {name} from './{name}'
+import { render } from '@testing-library/react'
+
+it('renders without crashing', () => {
+  const { getByTestId } = render(<{name} />)
+  expect(getByTestId('{name}-test-id')).toBeInTheDocument()
+})

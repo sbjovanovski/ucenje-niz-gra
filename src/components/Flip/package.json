@@ -1,0 +1,7 @@
+{
+  "name": "Flip",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./Flip.tsx",
+  "types": "./Flip.tsx"
+}
