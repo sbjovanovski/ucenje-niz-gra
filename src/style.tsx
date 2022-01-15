@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import {createGlobalStyle} from 'styled-components'
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -7,7 +7,15 @@ const GlobalStyles = createGlobalStyle`
     -webkit-text-size-adjust: 100%;
     font-size: 16px;
     line-height: 1;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    @font-face {
+      font-family: "ArialRoundedMTProCyr";
+      src: url(${process.env.PUBLIC_URL}/font/ArialRoundedMTProCyr.otf);
+    }
+    @font-face {
+      font-family: "ArialRoundedMTProCyr-Bold";
+      src: url(${process.env.PUBLIC_URL}/font/ArialRoundedMTProCyr-Bold.otf);
+    }
+    font-family: ArialRoundedMTProCyr, ArialRoundedMTProCyr-Bold;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     /* stylelint-enable */
