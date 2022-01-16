@@ -1,9 +1,12 @@
 import styled from "styled-components";
-import {ChangeEvent, useEffect, useRef, useState} from "react";
+import {ChangeEvent, KeyboardEvent, useEffect, useRef, useState} from "react";
 
 const CharactersWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(${(props: { numberOfCharacters: number, characterWidth: number }) => props.numberOfCharacters + `, ${props.characterWidth}rem`});
+  grid-template-columns: repeat(${(props: {
+    numberOfCharacters: number,
+    characterWidth: number
+  }) => props.numberOfCharacters + `, ${props.characterWidth}rem`});
   grid-gap: .5rem;
   align-items: center;
   justify-content: center;
@@ -38,21 +41,69 @@ interface InputCharactersProps {
   onDone: (word: string) => void
 }
 
+interface Word {
+  id: number
+  value: string
+}
+
+const backSpaceClickCount: { [id: string | number]: number } = {}
+
 const InputCharacters = ({numberOfCharacters, onDone}: InputCharactersProps) => {
   const RANDOM_ID = generateUUID();
   const wrapperRef = useRef<HTMLElement>()
   const [characterWidth, setCharacterWidth] = useState<number>(1.5)
+  const [word, setWord] = useState<Word[]>([])
+
+  const updateWord = (character: string, characterId: number) => {
+    setWord((prevState) => {
+      const wordClone = prevState.slice()
+      const wordIndex = wordClone.findIndex(w => w.id === characterId)
+      if (wordIndex !== -1) {
+        wordClone[wordIndex].value = character
+      } else {
+        wordClone.push({
+          id: characterId,
+          value: character
+        })
+      }
+      return wordClone
+    })
+  }
 
   const onChange = (event: ChangeEvent<HTMLInputElement>, characterId: number) => {
-    const value = event.target.value
-    if (value.trim()) {
+    const value = event.target.value.trim() || ''
+    updateWord(value, characterId)
+    if (value) {
       if (characterId + 1 <= numberOfCharacters) {
         document.getElementById(`${RANDOM_ID}-${characterId + 1}`)?.focus()
-      } else {
-        onDone('')
       }
     }
   }
+
+  const onKeyUp = (event: KeyboardEvent<HTMLInputElement>, characterId: number) => {
+    if (event.key === 'Backspace') {
+      const value = event.currentTarget.value.trim()
+      backSpaceClickCount[`${RANDOM_ID}-${characterId}`] = backSpaceClickCount[`${RANDOM_ID}-${characterId}`] ?
+        backSpaceClickCount[`${RANDOM_ID}-${characterId}`] + 1 : 1
+      if (characterId - 1 >= 1 && !value && backSpaceClickCount[`${RANDOM_ID}-${characterId}`] > 1) {
+        document.getElementById(`${RANDOM_ID}-${characterId - 1}`)?.focus()
+        backSpaceClickCount[`${RANDOM_ID}-${characterId}`] = 0
+      }
+    }
+  }
+
+  useEffect(() => {
+    const finalWord = word.filter(w => w.value.trim())
+    if (finalWord.length === numberOfCharacters) {
+      onDone(
+        finalWord
+          .sort(w => w.id)
+          .map(w => w.value)
+          .join('')
+          .trim()
+      )
+    }
+  }, [word])
 
   useEffect(() => {
     const parentElementWidth = wrapperRef?.current?.parentElement?.clientWidth || CARD_WIDTH
@@ -68,6 +119,7 @@ const InputCharacters = ({numberOfCharacters, onDone}: InputCharactersProps) => 
           maxLength={1}
           id={`${RANDOM_ID}-${i + 1}`}
           onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event, i + 1)}
+          onKeyUp={(event: KeyboardEvent<HTMLInputElement>) => onKeyUp(event, i + 1)}
         />
       ))}
     </CharactersWrapper>

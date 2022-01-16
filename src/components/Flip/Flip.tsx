@@ -9,6 +9,11 @@ const FlipBox = styled.div`
   perspective: 1000px;
 `
 
+interface FlipBoxInnerProps {
+  isFlipped: boolean
+  hasError: boolean
+}
+
 const FlipBoxInner = styled.div`
   position: relative;
   width: 100%;
@@ -16,7 +21,31 @@ const FlipBoxInner = styled.div`
   text-align: center;
   transition: transform 0.5s;
   transform-style: preserve-3d;
-  ${(props: { isFlipped: boolean }) => props.isFlipped && `transform: rotateY(-180deg);`};
+  ${(props: FlipBoxInnerProps) => props.isFlipped && `transform: rotateY(-180deg);`};
+  ${(props: FlipBoxInnerProps) => props.hasError && `
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  
+    @keyframes shake {
+      10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+      }
+      
+      20%, 80% {
+        transform: translate3d(2px, 0, 0);
+      }
+    
+      30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+      }
+    
+      40%, 60% {
+        transform: translate3d(4px, 0, 0);
+      }
+    }
+  `};
 `
 
 const FlipBoxContent = styled.div`
@@ -26,7 +55,6 @@ const FlipBoxContent = styled.div`
   backface-visibility: hidden;
   border-radius: .25rem;
   background-color: #f2f2f2;
-  cursor: pointer;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -51,17 +79,19 @@ interface FlipProps {
   back: ReactNode | string
   flipped: boolean
   correctAnswer: string
+  onDone: (word: string) => void
+  hasError: boolean
 }
 
-const Flip = ({front, back, flipped, correctAnswer}: FlipProps) => (
+const Flip = ({front, back, flipped, correctAnswer, onDone, hasError}: FlipProps) => (
   <FlipBox data-testid='Flip-test-id'>
-    <FlipBoxInner isFlipped={flipped}>
+    <FlipBoxInner isFlipped={flipped} hasError={hasError}>
       <FlipBoxContent>
         {front}
         <InputWrapper>
           <InputCharacters
             numberOfCharacters={correctAnswer.length}
-            onDone={(word) => alert(word)}
+            onDone={onDone}
           />
         </InputWrapper>
       </FlipBoxContent>

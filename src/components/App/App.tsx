@@ -46,6 +46,38 @@ const CardImage = styled.img`
 const App = () => {
   const [stateCards, setStateCards] = useState<Card[]>(cards)
 
+  const onCardDone = (word: string, card: Card) => {
+    if (word === card.correctAnswer) {
+      setStateCards((prevState: Card[]) => {
+        const stateCardsClone = prevState.slice()
+        const cardIndex = stateCardsClone.findIndex(c => c.id === card.id)
+        if (cardIndex !== -1) {
+          stateCardsClone[cardIndex].flipped = true
+        }
+        return stateCardsClone
+      })
+    } else {
+      setStateCards((prevState: Card[]) => {
+        const stateCardsClone = prevState.slice()
+        const cardIndex = stateCardsClone.findIndex(c => c.id === card.id)
+        if (cardIndex !== -1) {
+          stateCardsClone[cardIndex].hasError = true
+        }
+        return stateCardsClone
+      });
+      setTimeout(() => {
+        setStateCards((prevState: Card[]) => {
+          const stateCardsClone = prevState.slice()
+          const cardIndex = stateCardsClone.findIndex(c => c.id === card.id)
+          if (cardIndex !== -1) {
+            stateCardsClone[cardIndex].hasError = false
+          }
+          return stateCardsClone
+        });
+      }, 500)
+    }
+  }
+
   return (
     <MainWrapper>
       <Title>
@@ -59,6 +91,8 @@ const App = () => {
             back={<CardImage src={card.backImage} alt={card.correctAnswer}/>}
             flipped={card.flipped}
             correctAnswer={card.correctAnswer}
+            hasError={!!card.hasError}
+            onDone={(word: string) => onCardDone(word, card)}
           />
         ))}
       </AppContent>
