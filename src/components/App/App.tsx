@@ -11,12 +11,11 @@ const MainWrapper = styled.div`
 `
 
 const AppContent = styled.div`
-  padding: 2rem;
+  padding: 2rem 0;
   display: grid;
-  width: auto;
+  margin: 0 auto;
   max-width: 64rem;
   box-sizing: border-box;
-  margin: 0 auto;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1rem;
 
