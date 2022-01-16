@@ -47,7 +47,7 @@ const App = () => {
   const [stateCards, setStateCards] = useState<Card[]>(cards)
 
   const onCardDone = (word: string, card: Card) => {
-    if (word === card.correctAnswer) {
+    if (word.toLocaleLowerCase() === card.correctAnswer.toLocaleLowerCase()) {
       setStateCards((prevState: Card[]) => {
         const stateCardsClone = prevState.slice()
         const cardIndex = stateCardsClone.findIndex(c => c.id === card.id)
