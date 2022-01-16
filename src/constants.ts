@@ -1,4 +1,5 @@
 import {Card} from "./typings/types";
+import {shape} from "canvas-confetti";
 
 export const cards: Card[] = [
   {
@@ -219,3 +220,27 @@ export const cards: Card[] = [
     flipped: false
   }
 ]
+
+const CONFETTI_SHAPES: shape[] = ["circle", "square"];
+
+export const confettiProps = {
+  particleCount: 500,
+  angle: 90,
+  spread: 360,
+  startVelocity: 45,
+  decay: 0.8,
+  gravity: 1,
+  drift: 0,
+  ticks: 600,
+  origin: {
+    x: 0.5,
+    y: 0.5,
+  },
+  colors: ['#26ccff', '#a25afd', '#ff5e7e', '#88ff5a', '#fcff42', '#ffa62d', '#ff36ff'],
+  shapes: CONFETTI_SHAPES,
+  scalar: 1,
+  zIndex: -1,
+  disableForReducedMotion: false,
+  resize: true,
+  useWorker: true,
+};

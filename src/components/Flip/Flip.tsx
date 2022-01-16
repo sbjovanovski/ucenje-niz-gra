@@ -1,6 +1,8 @@
 import styled from 'styled-components'
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import InputCharacters from "../InputCharacters";
+import ReactCanvasConfetti from 'react-canvas-confetti'
+import {confettiProps} from "../../constants";
 
 const FlipBox = styled.div`
   background-color: transparent;
@@ -74,6 +76,11 @@ const InputWrapper = styled.div`
   width: 100%;
 `
 
+const ConfettiWrapper = styled.div`
+  position: absolute;
+  z-index: ${(props: { flipped: boolean }) => props.flipped ? 2 : -1};
+`
+
 interface FlipProps {
   front: ReactNode | string
   back: ReactNode | string
@@ -97,6 +104,14 @@ const Flip = ({front, back, flipped, correctAnswer, onDone, hasError}: FlipProps
       </FlipBoxContent>
       <FlipBoxContent flippedContent>
         {back}
+        <ConfettiWrapper flipped={flipped}>
+          <ReactCanvasConfetti
+            {...confettiProps}
+            fire={flipped}
+            height={356}
+            width={240}
+          />
+        </ConfettiWrapper>
       </FlipBoxContent>
     </FlipBoxInner>
   </FlipBox>
